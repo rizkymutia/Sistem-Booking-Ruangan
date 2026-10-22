@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
+import { format } from "date-fns";
 
 type SelectedSlot = {
   date: string;
@@ -17,24 +18,45 @@ type Recommendation = {
 };
 
 export default function BookingForm({ roomId, selectedSlot }: { roomId: string; selectedSlot: SelectedSlot | null }) {
-  const [date, setDate] = useState("");
-  const [start, setStart] = useState("");
-  const [end, setEnd] = useState("");
+  const [date, setDate] = useState(selectedSlot?.date ?? "");
+  const [start, setStart] = useState(selectedSlot?.start ?? "");
+  const [end, setEnd] = useState(selectedSlot?.end ?? "");
+
+  const [bookingRoomId, setBookingRoomId] = useState(roomId);
+  const [bookingRoomName, setBookingRoomName] = useState<string | null>(null);
 
   const [message, setMessage] = useState("");
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
 
-  useEffect(() => {
-    if (!selectedSlot) return;
+  function applyRecommendation(r: Recommendation) {
+    const recommendedStart = new Date(r.start);
+    const recommendedEnd = new Date(r.end);
 
-    setDate(selectedSlot.date);
-    setStart(selectedSlot.start);
-    setEnd(selectedSlot.end);
-  }, [selectedSlot]);
+    if (Number.isNaN(recommendedStart.getTime()) || Number.isNaN(recommendedEnd.getTime())) {
+      toast.error("Jadwal rekomendasi tidak valid");
+      return;
+    }
 
+    setBookingRoomId(r.roomId);
+    setBookingRoomName(r.roomName);
+
+    setDate(format(recommendedStart, "yyyy-MM-dd"));
+    setStart(format(recommendedStart, "HH:mm"));
+    setEnd(format(recommendedEnd, "HH:mm"));
+
+    setRecommendations([]);
+    setMessage("Rekomendasi dipilih. Periksa jadwal sebelum booking.");
+  }
   async function submitBooking() {
     if (!date || !start || !end) {
       toast.error("Silakan pilih slot terlebih dahulu");
+      return;
+    }
+    const startDate = new Date(`${date}T${start}:00`);
+    const endDate = new Date(`${date}T${end}:00`);
+
+    if (!Number.isFinite(startDate.getTime()) || !Number.isFinite(endDate.getTime()) || startDate <= new Date() || endDate <= startDate) {
+      toast.error("Tanggal atau waktu booking tidak valid");
       return;
     }
 
@@ -44,9 +66,9 @@ export default function BookingForm({ roomId, selectedSlot }: { roomId: string; 
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        roomId,
-        startTime: `${date}T${start}:00`,
-        endTime: `${date}T${end}:00`,
+        roomId: bookingRoomId,
+        startTime: startDate.toISOString(),
+        endTime: endDate.toISOString(),
       }),
     });
 
@@ -70,7 +92,7 @@ export default function BookingForm({ roomId, selectedSlot }: { roomId: string; 
   return (
     <div className="space-y-4">
       <h3 className="text-2xl font-bold text-white">Booking</h3>
-
+      {bookingRoomName && <p className="text-sm text-cyan-300">Ruangan rekomendasi: {bookingRoomName}</p>}
       <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-full rounded-lg border border-slate-700 bg-slate-800 p-3 text-white" />
 
       <div className="grid grid-cols-2 gap-3">
@@ -114,7 +136,7 @@ export default function BookingForm({ roomId, selectedSlot }: { roomId: string; 
                       </p>
                     </div>
 
-                    <button onClick={() => useRecommendation(r)} className="rounded-md bg-cyan-500 px-3 py-2 text-sm font-semibold text-slate-950 hover:bg-cyan-400">
+                    <button onClick={() => applyRecommendation(r)} className="rounded-md bg-cyan-500 px-3 py-2 text-sm font-semibold text-slate-950 hover:bg-cyan-400">
                       Gunakan
                     </button>
                   </div>

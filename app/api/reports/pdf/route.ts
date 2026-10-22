@@ -1,8 +1,18 @@
 import { NextResponse } from "next/server";
 import PDFDocument from "pdfkit";
 import { prisma } from "@/lib/prisma";
+import { getUser } from "@/lib/getUser";
 
 export async function GET() {
+  const user = await getUser();
+
+  if (!user) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
+  if (user.role !== "ADMIN") {
+    return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+  }
   const bookings = await prisma.booking.findMany({
     include: {
       room: true,
@@ -17,7 +27,7 @@ export async function GET() {
 
   const chunks: Buffer[] = [];
 
-  doc.on("data", (chunk) => chunks.push(chunk));
+  doc.on("data", (chunk: Buffer) => chunks.push(chunk));
 
   const endPromise = new Promise<Buffer>((resolve) => {
     doc.on("end", () => {
@@ -51,7 +61,7 @@ export async function GET() {
 
   const pdf = await endPromise;
 
-  return new NextResponse(pdf, {
+  return new NextResponse(new Uint8Array(pdf), {
     headers: {
       "Content-Type": "application/pdf",
       "Content-Disposition": 'attachment; filename="SpaceSync_Report.pdf"',

@@ -65,7 +65,7 @@ export default function AdminBookingCard({ booking }: { booking: Booking }) {
               Approve
             </button>
 
-            <button onClick={() => updateStatus("CANCELLED")} className="rounded-lg bg-red-600 px-4 py-2 font-semibold hover:bg-red-500">
+            <button onClick={() => updateStatus("REJECTED")} className="rounded-lg bg-red-600 px-4 py-2 font-semibold hover:bg-red-500">
               Reject
             </button>
           </div>

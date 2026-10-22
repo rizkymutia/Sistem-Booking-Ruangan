@@ -2,7 +2,6 @@ import { prisma } from "@/lib/prisma";
 import Navbar from "@/components/layout/Navbar";
 import Container from "@/components/layout/Container";
 import RoomCard from "@/components/rooms/RoomCard";
-import BookingForm from "@/components/rooms/BookingForm";
 
 export default async function RoomsPage() {
   const rooms = await prisma.room.findMany({

@@ -3,70 +3,98 @@
 import QRCode from "react-qr-code";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
-import Link from "next/link";
+import CancelBookingButton from "@/components/rooms/CancelBookingButton";
+
+type BookingStatus =
+  | "PENDING"
+  | "APPROVED"
+  | "CHECKED_IN"
+  | "COMPLETED"
+  | "CANCELLED"
+  | "REJECTED";
 
 type Booking = {
   id: string;
-  status: string;
+  status: BookingStatus;
+  qrToken: string | null;
   startTime: Date;
   endTime: Date;
-  room: {
-    name: string;
-    location: string;
-  };
+  room: { name: string; location: string };
+};
+
+const statusLabels: Record<BookingStatus, string> = {
+  PENDING: "Menunggu Persetujuan",
+  APPROVED: "Disetujui",
+  CHECKED_IN: "Sudah Check-in",
+  COMPLETED: "Selesai",
+  CANCELLED: "Dibatalkan",
+  REJECTED: "Ditolak",
+};
+
+const statusColors: Record<BookingStatus, string> = {
+  PENDING: "bg-yellow-500/10 text-yellow-400",
+  APPROVED: "bg-cyan-500/10 text-cyan-400",
+  CHECKED_IN: "bg-green-500/10 text-green-400",
+  COMPLETED: "bg-slate-700 text-slate-300",
+  CANCELLED: "bg-red-500/10 text-red-400",
+  REJECTED: "bg-orange-500/10 text-orange-400",
 };
 
 export default function BookingCard({ booking }: { booking: Booking }) {
-  const qrUrl = `http://localhost:3000/checkin/${booking.id}`;
-  const checkedIn = booking.status === "CHECKED_IN";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/+$/, "");
+  const isApproved = booking.status === "APPROVED";
+  const isCheckedIn = booking.status === "CHECKED_IN";
+  const canCancel = booking.status === "PENDING" || isApproved;
+  const qrUrl = isApproved && booking.qrToken && baseUrl
+    ? `${baseUrl}/checkin/${booking.qrToken}`
+    : null;
 
   return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
+    <article className="rounded-2xl border border-slate-800 bg-slate-900 p-6 text-white shadow-lg">
       <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
-        {/* Informasi Booking */}
-        <div className="space-y-2">
+        <div className="w-full flex-1 space-y-3">
           <h2 className="text-2xl font-bold">{booking.room.name}</h2>
-
-          <p className="text-slate-400">{booking.room.location}</p>
-
-          <p className="text-slate-300">
-            {format(booking.startTime, "dd MMMM yyyy", {
-              locale: id,
-            })}
+          <p className="text-sm text-slate-400">📍 {booking.room.location}</p>
+          <p className="text-sm text-slate-300">
+            📅 {format(booking.startTime, "dd MMMM yyyy", { locale: id })}
           </p>
-
           <p className="font-semibold text-cyan-400">
-            {format(booking.startTime, "HH:mm")} - {format(booking.endTime, "HH:mm")}
+            🕐 {format(booking.startTime, "HH:mm")} - {format(booking.endTime, "HH:mm")}
           </p>
-
-          {checkedIn ? (
-            <span className="inline-flex rounded-full bg-green-500/20 px-3 py-1 text-sm font-semibold text-green-400">CHECKED_IN</span>
-          ) : (
-            <span className="inline-flex rounded-full bg-orange-500/20 px-3 py-1 text-sm font-semibold text-orange-400">PENDING</span>
+          <span className={`inline-flex rounded-full px-3 py-1 text-sm font-semibold ${statusColors[booking.status]}`}>
+            {statusLabels[booking.status]}
+          </span>
+          {canCancel && (
+            <div className="pt-3">
+              <CancelBookingButton bookingId={booking.id} />
+            </div>
           )}
         </div>
 
-        {/* QR / Status */}
-        <div className="text-center">
-          {checkedIn ? (
-            <div className="flex h-[164px] w-[164px] flex-col items-center justify-center rounded-xl border border-green-500/30 bg-green-500/10">
+        <div className="flex flex-col items-center text-center">
+          {isCheckedIn ? (
+            <div className="flex h-[164px] w-[164px] flex-col items-center justify-center rounded-xl bg-green-500/10 text-green-400">
               <div className="text-5xl">✅</div>
-
-              <p className="mt-3 font-bold text-green-400">Sudah Check-in</p>
+              <p className="mt-3 font-bold">Sudah Check-in</p>
             </div>
-          ) : (
+          ) : qrUrl ? (
             <>
               <div className="rounded-xl bg-white p-3">
                 <QRCode value={qrUrl} size={140} />
               </div>
-
-              <Link href={`/checkin/${booking.id}`} className="mt-3 block rounded-lg bg-cyan-500 py-2 font-semibold text-slate-950 transition hover:bg-cyan-400">
-                Buka QR
-              </Link>
+              <p className="mt-3 max-w-[210px] text-sm text-slate-400">
+                Tunjukkan QR kepada petugas untuk dipindai.
+              </p>
             </>
+          ) : (
+            <div className="flex min-h-[164px] w-[200px] flex-col items-center justify-center rounded-xl bg-slate-800 p-4 text-sm text-slate-400">
+              {isApproved
+                ? "QR belum tersedia. Minta admin menerbitkan QR untuk booking ini."
+                : "QR tidak tersedia untuk status ini."}
+            </div>
           )}
         </div>
       </div>
-    </div>
+    </article>
   );
 }
