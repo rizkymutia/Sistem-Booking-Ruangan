@@ -1,5 +1,7 @@
 # SpaceSync
 
+[![SpaceSync CI](https://github.com/rizkymutia/Sistem-Booking-Ruangan/actions/workflows/ci.yml/badge.svg?branch=aplikasi-lengkap)](https://github.com/rizkymutia/Sistem-Booking-Ruangan/actions/workflows/ci.yml)
+
 **A room reservation and check-in management system built with Next.js, TypeScript, PostgreSQL, and Prisma.**
 
 SpaceSync helps teams find meeting rooms, request reservations, manage approvals, and check in using QR codes. The project combines a user-facing booking workflow with an administrative dashboard and reporting tools.
@@ -37,16 +39,16 @@ SpaceSync helps teams find meeting rooms, request reservations, manage approvals
 
 ## Tech stack
 
-| Layer | Technology |
-| --- | --- |
-| Full-stack web | Next.js 16 (App Router), React 19, TypeScript |
-| UI | Tailwind CSS 4, Lucide React, Sonner |
-| Database | PostgreSQL, Prisma ORM 6 |
-| Authentication | JWT, password hashing with bcryptjs, role-based authorization |
-| Calendar and charts | React Big Calendar, date-fns, Recharts |
-| Reports | ExcelJS, PDFKit |
-| QR check-in | react-qr-code, server-side token verification |
-| Optional email notifications | Nodemailer |
+| Layer                        | Technology                                                    |
+| ---------------------------- | ------------------------------------------------------------- |
+| Full-stack web               | Next.js 16 (App Router), React 19, TypeScript                 |
+| UI                           | Tailwind CSS 4, Lucide React, Sonner                          |
+| Database                     | PostgreSQL, Prisma ORM 6                                      |
+| Authentication               | JWT, password hashing with bcryptjs, role-based authorization |
+| Calendar and charts          | React Big Calendar, date-fns, Recharts                        |
+| Reports                      | ExcelJS, PDFKit                                               |
+| QR check-in                  | react-qr-code, server-side token verification                 |
+| Optional email notifications | Nodemailer                                                    |
 
 ## Application flow
 
