@@ -3,9 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.room.deleteMany();
-
-  await prisma.room.createMany({
+  const result = await prisma.room.createMany({
     data: [
       {
         code: "R001",
@@ -68,15 +66,17 @@ async function main() {
         description: "Ruang brainstorming yang nyaman.",
       },
     ],
+    skipDuplicates: true,
   });
 
-  console.log("🌱 Room seed berhasil!");
+  console.log(`Seeder selesai. ${result.count} ruangan baru ditambahkan.`);
 }
 
+// Jalankan seeder
 main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
+  .catch((error) => {
+    console.error("Seeding gagal:", error);
+    process.exitCode = 1;
   })
   .finally(async () => {
     await prisma.$disconnect();

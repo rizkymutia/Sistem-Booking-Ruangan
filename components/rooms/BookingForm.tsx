@@ -52,6 +52,13 @@ export default function BookingForm({ roomId, selectedSlot }: { roomId: string; 
       toast.error("Silakan pilih slot terlebih dahulu");
       return;
     }
+    const startDate = new Date(`${date}T${start}:00`);
+    const endDate = new Date(`${date}T${end}:00`);
+
+    if (!Number.isFinite(startDate.getTime()) || !Number.isFinite(endDate.getTime()) || startDate <= new Date() || endDate <= startDate) {
+      toast.error("Tanggal atau waktu booking tidak valid");
+      return;
+    }
 
     const res = await fetch("/api/bookings", {
       method: "POST",
@@ -60,8 +67,8 @@ export default function BookingForm({ roomId, selectedSlot }: { roomId: string; 
       },
       body: JSON.stringify({
         roomId: bookingRoomId,
-        startTime: `${date}T${start}:00`,
-        endTime: `${date}T${end}:00`,
+        startTime: startDate.toISOString(),
+        endTime: endDate.toISOString(),
       }),
     });
 
