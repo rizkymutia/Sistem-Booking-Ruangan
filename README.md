@@ -37,16 +37,16 @@ SpaceSync helps teams find meeting rooms, request reservations, manage approvals
 
 ## Tech stack
 
-| Layer                        | Technology                                                    |
-| ---------------------------- | ------------------------------------------------------------- |
-| Full-stack web               | Next.js 16 (App Router), React 19, TypeScript                 |
-| UI                           | Tailwind CSS 4, Lucide React, Sonner                          |
-| Database                     | PostgreSQL, Prisma ORM 6                                      |
-| Authentication               | JWT, password hashing with bcryptjs, role-based authorization |
-| Calendar and charts          | React Big Calendar, date-fns, Recharts                        |
-| Reports                      | ExcelJS, PDFKit                                               |
-| QR check-in                  | react-qr-code, server-side token verification                 |
-| Optional email notifications | Nodemailer                                                    |
+| Layer | Technology |
+| --- | --- |
+| Full-stack web | Next.js 16 (App Router), React 19, TypeScript |
+| UI | Tailwind CSS 4, Lucide React, Sonner |
+| Database | PostgreSQL, Prisma ORM 6 |
+| Authentication | JWT, password hashing with bcryptjs, role-based authorization |
+| Calendar and charts | React Big Calendar, date-fns, Recharts |
+| Reports | ExcelJS, PDFKit |
+| QR check-in | react-qr-code, server-side token verification |
+| Optional email notifications | Nodemailer |
 
 ## Application flow
 
@@ -164,16 +164,33 @@ Manual scenarios exercised during development include authorization for booking 
 
 ## Screenshots
 
-Screenshots will be added once a representative demo dataset and non-sensitive accounts are prepared. Recommended captures:
+The screenshots below illustrate the user and administrator flows using demonstration data. Images are stored under `docs/screenshots/`.
 
-1. Home page and room listing
-2. Room details and booking calendar
-3. Booking history and status/cancellation controls
-4. Admin booking approval screen
-5. Admin analytics and report export screen
-6. QR check-in flow using **dummy tokens/data only**
+### Home page
 
-Screenshots should be placed under `docs/screenshots/` and linked here after they have been captured.
+![SpaceSync home page](docs/screenshots/01-home.png)
+
+### Room listing
+
+![Available meeting rooms](docs/screenshots/02-rooms.png)
+
+### Room details and booking calendar
+
+![Room details and reservation calendar](docs/screenshots/03-booking-calendar.png)
+
+### Booking history and cancellation
+
+![Booking history and cancellation controls](docs/screenshots/04-booking-history.png)
+
+### Administration dashboard
+
+![Administrator dashboard and booking management](docs/screenshots/05-admin-dashboard.png)
+
+### QR check-in
+
+![QR check-in interface with demo data](docs/screenshots/06-qr-checkin.png)
+
+> Screenshot file names above must match the files committed to `docs/screenshots/` exactly. Use non-sensitive demonstration data only, and never publish active QR tokens, personal details, or private administrator information.
 
 ## Deployment and security notes
 
