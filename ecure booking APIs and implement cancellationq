@@ -1,0 +1,16 @@
+ app/api/admin/bookings/route.ts          |   83 [32m+[m[31m-[m
+ app/api/bookings/[id]/cancel/route.ts    |   98 [32m+++[m
+ app/api/checkin/route.ts                 |   82 [32m+[m[31m-[m
+ app/api/reports/excel/route.ts           |   12 [32m+[m[31m-[m
+ app/api/reports/pdf/route.ts             |   14 [32m+[m[31m-[m
+ app/checkin/[id]/page.tsx                |   82 [32m+[m[31m-[m
+ app/rooms/page.tsx                       |    1 [31m-[m
+ components/admin/AdminBookingCard.tsx    |    2 [32m+[m[31m-[m
+ components/calendar/RoomCalendar.tsx     |   11 [32m+[m[31m-[m
+ components/rooms/BookingCard.tsx         |  106 [32m++[m[31m-[m
+ components/rooms/BookingForm.tsx         |   41 [32m+[m[31m-[m
+ components/rooms/CancelBookingButton.tsx |   57 [32m++[m
+ components/rooms/RoomBookingSection.tsx  |    2 [32m+[m[31m-[m
+ package-lock.json                        | 1275 [32m+++++++++++++++++++++++++++[m[31m---[m
+ package.json                             |    4 [32m+[m
+ 15 files changed, 1644 insertions(+), 226 deletions(-)
