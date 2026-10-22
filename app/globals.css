@@ -24,3 +24,79 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+/* ===========================
+   React Big Calendar Dark
+=========================== */
+
+.calendar-dark .rbc-calendar {
+  background: #0f172a;
+  color: white;
+}
+
+.calendar-dark .rbc-toolbar {
+  margin-bottom: 16px;
+}
+
+.calendar-dark .rbc-toolbar button {
+  background: #1e293b;
+  color: white;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 6px 12px;
+}
+
+.calendar-dark .rbc-toolbar button:hover {
+  background: #06b6d4;
+  color: #082f49;
+}
+
+.calendar-dark .rbc-toolbar button.rbc-active {
+  background: #06b6d4;
+  color: #082f49;
+}
+
+.calendar-dark .rbc-header {
+  background: #1e293b;
+  color: #cbd5e1;
+  border-color: #334155;
+  padding: 10px;
+}
+
+.calendar-dark .rbc-time-view,
+.calendar-dark .rbc-month-view {
+  border-color: #334155;
+}
+
+.calendar-dark .rbc-time-content,
+.calendar-dark .rbc-time-header-content {
+  border-color: #334155;
+}
+
+.calendar-dark .rbc-timeslot-group {
+  border-color: #1e293b;
+}
+
+.calendar-dark .rbc-time-slot {
+  border-top: 1px solid #1e293b;
+}
+
+.calendar-dark .rbc-label {
+  color: #94a3b8;
+}
+
+.calendar-dark .rbc-today {
+  background: rgba(6, 182, 212, 0.08);
+}
+
+.calendar-dark .rbc-event {
+  background: #06b6d4;
+  border: none;
+  color: #082f49;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.calendar-dark .rbc-current-time-indicator {
+  background: #ef4444;
+  height: 2px;
+}
