@@ -1,8 +1,18 @@
 import { NextResponse } from "next/server";
 import ExcelJS from "exceljs";
 import { prisma } from "@/lib/prisma";
+import { getUser } from "@/lib/getUser";
 
 export async function GET() {
+  const user = await getUser();
+
+  if (!user) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
+  if (user.role !== "ADMIN") {
+    return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+  }
   const workbook = new ExcelJS.Workbook();
   const sheet = workbook.addWorksheet("Booking Report");
 
@@ -42,7 +52,7 @@ export async function GET() {
 
   const buffer = await workbook.xlsx.writeBuffer();
 
-  return new NextResponse(buffer, {
+  return new NextResponse(new Uint8Array(buffer), {
     headers: {
       "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       "Content-Disposition": 'attachment; filename="SpaceSync_Report.xlsx"',

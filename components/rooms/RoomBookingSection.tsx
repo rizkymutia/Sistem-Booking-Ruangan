@@ -15,7 +15,7 @@ export default function RoomBookingSection({ roomId }: { roomId: string }) {
 
   return (
     <div className="space-y-8">
-      <BookingForm roomId={roomId} selectedSlot={slot} />
+      <BookingForm key={`${roomId}-${slot?.date ?? ""}-${slot?.start ?? ""}-${slot?.end ?? ""}`} roomId={roomId} selectedSlot={slot} />
       <RoomCalendar roomId={roomId} onSelectSlot={setSlot} />
     </div>
   );

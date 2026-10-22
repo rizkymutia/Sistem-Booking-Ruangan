@@ -23,6 +23,13 @@ type BookingEvent = {
   end: Date;
 };
 
+type ApiBookingEvent = {
+  id: string;
+  title: string;
+  start: string;
+  end: string;
+};
+
 type Props = {
   roomId: string;
   onSelectSlot?: (slot: { date: string; start: string; end: string }) => void;
@@ -34,10 +41,10 @@ export default function RoomCalendar({ roomId, onSelectSlot }: Props) {
   useEffect(() => {
     async function loadEvents() {
       const res = await fetch(`/api/rooms/${roomId}/bookings`);
-      const data = await res.json();
+      const data: ApiBookingEvent[] = await res.json();
 
       setEvents(
-        data.map((e: any) => ({
+        data.map((e: ApiBookingEvent) => ({
           id: e.id,
           title: e.title,
           start: new Date(e.start),
